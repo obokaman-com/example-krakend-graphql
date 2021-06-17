@@ -1,0 +1,58 @@
+{
+  "version": 2,
+  "timeout": "3000ms",
+  "cache_ttl": "300s",
+  "host": [ "http://fake_rest:8080" ],
+  "endpoints": [
+    {
+      "endpoint": "/user/{user}",
+      "backend": [
+        {
+          "url_pattern": "/user/{user}"
+        }
+      ]
+    },
+    {
+      "endpoint": "/github/{user}",
+      "backend": [
+        {
+          "host": [ "https://api.github.com" ],
+          "url_pattern": "/users/{user}",
+          "whitelist": [
+            "avatar_url",
+            "name",
+            "company",
+            "blog",
+            "location",
+            "mail",
+            "hireable",
+            "followers",
+            "public_repos",
+            "public_gists"
+          ],
+          "mapping": { "blog": "website" },
+          "group": "github"
+        },
+        {
+          "host": [
+            "https://api.github.com"
+          ],
+          "url_pattern": "/users/{user}/repos",
+          "mapping": {
+            "collection": "repos"
+          },
+          "is_collection": true
+        }
+      ]
+    },
+    {
+      "endpoint": "/graphql/hello-world",
+      "backend": [
+        {
+          "host": [ "http://fake_graphql:4000" ],
+          "url_pattern": "/graphql?query=%7Bhello%7D"
+        }
+      ]
+    }
+  ]
+}
